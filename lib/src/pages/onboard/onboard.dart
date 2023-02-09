@@ -1,17 +1,17 @@
-import 'package:fbus_app/assets/constant.dart';
-import 'package:fbus_app/models/onboard_model.dart';
-import 'package:fbus_app/screens/main_screen.dart';
+import 'package:fbus_app/src/assets/constant.dart';
+import 'package:fbus_app/src/models/onboard_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class OnboardScreen extends StatefulWidget {
-  const OnboardScreen({super.key});
+class OnboardPage extends StatefulWidget {
+  const OnboardPage({super.key});
 
   @override
-  State<OnboardScreen> createState() => _OnboardScreenState();
+  State<OnboardPage> createState() => _OnboardPageState();
 }
 
-class _OnboardScreenState extends State<OnboardScreen> {
+class _OnboardPageState extends State<OnboardPage> {
   int currentIndex = 0;
   late PageController _pageController;
 
@@ -28,7 +28,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
   }
 
   _storeOnboardInfo() async {
-    int isViewed = 0;
+    int isViewed = 1;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('onBoard', isViewed);
   }
@@ -44,8 +44,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
           TextButton(
             onPressed: () {
               _storeOnboardInfo();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const MainScreen()));
+              Get.toNamed('/');
             },
             child: Text(
               "Skip",
@@ -123,10 +122,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                       if (index == screens.length - 1) {
                         await _storeOnboardInfo();
                         if (!mounted) return;
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (c) => const MainScreen()));
+                        Get.toNamed('/');
                       }
 
                       _pageController.nextPage(

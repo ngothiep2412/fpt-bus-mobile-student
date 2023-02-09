@@ -1,56 +1,67 @@
-import 'package:fbus_app/screens/onboard.dart';
+import 'package:fbus_app/src/assets/constant.dart';
+import 'package:fbus_app/src/home/main_screen.dart';
+import 'package:fbus_app/src/pages/login/login_page.dart';
+import 'package:fbus_app/src/pages/onboard/onboard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 int? isviewed;
 void main() async {
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-  ));
+  WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   isviewed = prefs.getInt('onBoard');
-  runApp(
-    MyApp(
-      child: MaterialApp(
-        title: 'FBus App',
-        theme: ThemeData(
-          primarySwatch: Colors.amber,
-        ),
-        home: isviewed != 0 ? const OnboardScreen() : const OnboardScreen(),
-        debugShowCheckedModeBanner: false,
-      ),
-    ),
-  );
+  // await GetStorage.init();
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  final Widget? child;
-
-  const MyApp({super.key, this.child});
-
-  static void restartApp(BuildContext context) {
-    context.findAncestorStateOfType<_MyAppState>()!.restartApp();
-  }
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  Key key = UniqueKey();
-  void restartApp() {
-    setState(() {
-      key = UniqueKey();
-    });
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return KeyedSubtree(
-      key: key,
-      child: widget.child!,
+    // print('User id: ${userSession.id}');
+
+    return GetMaterialApp(
+      title: 'Delivery Udemy',
+      debugShowCheckedModeBanner: false,
+      // initialRoute: userSession.id != null ? '/homne' : '/',
+      initialRoute: isviewed != 0 ? '/' : '/onboard',
+      getPages: [
+        GetPage(name: '/', page: () => LoginPage()),
+        GetPage(name: '/onboard', page: () => const OnboardPage()),
+        // GetPage(name: '/register', page: () => RegisterPage()),
+        GetPage(name: '/home', page: () => const MainPage()),
+      ],
+      theme: ThemeData(
+          primaryColor: primary,
+          colorScheme: ColorScheme(
+            primary: primary,
+            secondary: Colors.amberAccent,
+            brightness: Brightness.light,
+            onBackground: Colors.grey,
+            onPrimary: Colors.grey,
+            surface: Colors.grey,
+            onSurface: Colors.grey,
+            error: Colors.grey,
+            onError: Colors.grey,
+            onSecondary: Colors.grey,
+            background: Colors.grey,
+          )),
+      navigatorKey: Get.key,
     );
   }
 }

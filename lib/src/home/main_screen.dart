@@ -1,18 +1,18 @@
-import 'package:fbus_app/assets/constant.dart';
-import 'package:fbus_app/screens/tabPages/home_tab.dart';
-import 'package:fbus_app/screens/tabPages/notification_tab.dart';
-import 'package:fbus_app/screens/tabPages/profile_tab.dart';
-import 'package:fbus_app/screens/tabPages/ticket_tab.dart';
+import 'package:fbus_app/src/assets/constant.dart';
+import 'package:fbus_app/src/pages/tabPages/home_tab.dart';
+import 'package:fbus_app/src/pages/tabPages/notification_tab.dart';
+import 'package:fbus_app/src/pages/tabPages/profile_tab.dart';
+import 'package:fbus_app/src/pages/tabPages/ticket_tab.dart';
 import 'package:flutter/material.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MainScreenState extends State<MainScreen>
+class _MainPageState extends State<MainPage>
     with SingleTickerProviderStateMixin {
   TabController? tabController;
   int selectedIndex = 0;

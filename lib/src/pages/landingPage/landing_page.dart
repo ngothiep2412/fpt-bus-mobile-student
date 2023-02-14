@@ -37,10 +37,39 @@ class LandingPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+=======
+>>>>>>> Stashed changes
+<<<<<<< HEAD
+          child: Image.asset(
+            Helper.getAssetName("login_bg.png"),
+            fit: BoxFit.cover,
+          ),
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
           // child: Image.asset(
           //   Helper.getAssetName("login_bg.png"),
           //   fit: BoxFit.cover,
           // ),
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+>>>>>>> ThiepNX-Task2
+>>>>>>> Stashed changes
+=======
+>>>>>>> ThiepNX-Task2
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
         ),
       ),
     );

@@ -1,9 +1,9 @@
-import 'package:fbus_app/src/assets/constant.dart';
-import 'package:fbus_app/src/pages/tabPages/home_tab.dart';
-import 'package:fbus_app/src/pages/tabPages/notification_tab.dart';
-import 'package:fbus_app/src/pages/tabPages/profile_tab.dart';
-import 'package:fbus_app/src/pages/tabPages/ticket_tab.dart';
 import 'package:flutter/material.dart';
+import './../const/colors.dart';
+import './../pages/tabPages/home_tab.dart';
+import './../pages/tabPages/ticket_tab.dart';
+import './../pages/tabPages/profile_tab.dart';
+import './../pages/tabPages/notification_tab.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -48,7 +48,7 @@ class _MainPageState extends State<MainPage>
           BottomNavigationBarItem(
             icon: Image.asset(
               'assets/logo/home.png',
-              color: selectedIndex == 0 ? primary : kgrey,
+              color: selectedIndex == 0 ? AppColor.orange : AppColor.orange,
               height: 30,
             ),
             label: "Home",
@@ -56,7 +56,7 @@ class _MainPageState extends State<MainPage>
           BottomNavigationBarItem(
             icon: Image.asset(
               'assets/logo/ticket.png',
-              color: selectedIndex == 1 ? primary : kgrey,
+              color: selectedIndex == 1 ? AppColor.orange : AppColor.orange,
               height: 30,
             ),
             label: "My Tickets",
@@ -64,7 +64,7 @@ class _MainPageState extends State<MainPage>
           BottomNavigationBarItem(
             icon: Image.asset(
               'assets/logo/notification.png',
-              color: selectedIndex == 2 ? primary : kgrey,
+              color: selectedIndex == 2 ? AppColor.orange : AppColor.orange,
               height: 30,
             ),
             label: "Notification",
@@ -72,13 +72,13 @@ class _MainPageState extends State<MainPage>
           BottomNavigationBarItem(
             icon: Image.asset(
               'assets/logo/profile.png',
-              color: selectedIndex == 3 ? primary : kgrey,
+              color: selectedIndex == 3 ? AppColor.orange : AppColor.orange,
               height: 30,
             ),
             label: "Profile",
           ),
         ],
-        selectedItemColor: primary,
+        selectedItemColor: AppColor.orange,
         backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: const TextStyle(fontSize: 14),

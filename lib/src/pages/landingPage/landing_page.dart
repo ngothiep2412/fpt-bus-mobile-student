@@ -37,12 +37,10 @@ class LandingPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-<<<<<<< HEAD
           child: Image.asset(
             Helper.getAssetName("login_bg.png"),
             fit: BoxFit.cover,
           ),
->>>>>>> ThiepNX-Task2
         ),
       ),
     );

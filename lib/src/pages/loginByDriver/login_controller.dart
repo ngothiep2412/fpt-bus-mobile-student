@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
 import './../../providers/users_provider.dart';
 
 class LoginController extends GetxController {

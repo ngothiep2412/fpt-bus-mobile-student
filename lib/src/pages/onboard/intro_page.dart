@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import './../../const/colors.dart';
 import './../../models/onboard_model.dart';
 import './../../utils/helper.dart';
@@ -39,20 +40,20 @@ class _IntroPageState extends State<IntroPage> {
           child: Column(
             children: [
               const SizedBox(
-                height: 30,
+                height: 60,
               ),
               bgImage(),
               circleAvatar(),
               const SizedBox(
-                height: 20,
+                height: 60,
               ),
               textIntro(),
               const SizedBox(
-                height: 20,
+                height: 30,
               ),
               descIntro(),
               const SizedBox(
-                height: 25,
+                height: 100,
               ),
               btnNext()
             ],
@@ -64,7 +65,7 @@ class _IntroPageState extends State<IntroPage> {
 
   Widget bgImage() {
     return Container(
-      height: 400,
+      height: 340,
       width: double.infinity,
       child: PageView.builder(
         controller: _controller,
@@ -132,7 +133,7 @@ class _IntroPageState extends State<IntroPage> {
 
   Widget btnNext() {
     return SizedBox(
-      height: 45,
+      height: 55,
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {

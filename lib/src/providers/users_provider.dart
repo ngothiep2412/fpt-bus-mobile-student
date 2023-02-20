@@ -1,71 +1,97 @@
 import 'dart:convert';
-import 'package:fbus_app/src/environment/environment.dart';
-import 'package:fbus_app/src/models/response_api.dart';
-import 'package:fbus_app/src/models/users.dart' as customer;
 import 'package:get/get.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+
+import './../environment/environment.dart';
+import './../models/response_api.dart';
+import './../models/users.dart';
 
 class UsersProviders extends GetConnect {
   String url = '${Environment.API_URL}api/users';
 
-  Future<Response> create(customer.User user) async {
-    Response response = await post(
-      '$url/create',
-      user.toJson(),
-      headers: {'Content-Type': 'application/json'},
+  Future<ResponseApi> loginGoogle(String token) async {
+    // String token = await user.getIdToken();
+    Uri uri = Uri.http(Environment.API_URL_OLD, '/api/v1/auth/sign-in');
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+    final Map<String, dynamic> body = {
+      'accessToken': token,
+    };
+
+    final http.Response response = await http.post(
+      uri,
+      headers: headers,
+      body: jsonEncode(body),
     );
-
-    return response;
-  }
-
-  Future<ResponseApi> login(String email, String password) async {
-    Response response = await post(
-      '$url/login',
-      {
-        'email': email,
-        'password': password,
-      },
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.body == null) {
-      Get.snackbar("Error", 'Request could not excute');
-      return ResponseApi();
-    }
-
-    ResponseApi responseApi = ResponseApi.fromJson(response.body);
-
-    return responseApi;
-  }
-
-  Future<String> postUser(User user) async {
-    // Uri uri = Uri.http(Environment.API_URL_OLD, '/api/users');
-    // final Map<String, String> headers = {
-    //   'Content-Type': 'application/json',
-    // };
-    // final Map<String, dynamic> body = {
-    //   'idToken': user.getIdToken(),
-    // };
-
-    // final http.Response response = await http.post(
-    //   uri,
-    //   headers: headers,
-    //   body: jsonEncode(body),
-    // );
 
     // Handle the response from the API
-    // if (response.statusCode == 200) {
-    //   final jwtToken = jsonDecode(response.body)['jwtToken'];
-    //   return jwtToken;
-    // } else {
-    //   throw Exception('Failed to create user');
-    // }
-    if (true) {
-      const jwtToken = 'asdasdasdasdasdasdasdasdasdasd';
-      return jwtToken;
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final responseApi = ResponseApi.fromJson(data);
+      return responseApi;
     } else {
       throw Exception('Failed to create user');
+    }
+  }
+
+  Future<ResponseApi> updateProfilePicture(
+      UserModel user, String base64Image, String jwtToken) async {
+    Uri uri = Uri.http(Environment.API_URL_OLD, '/api/v1/upload-file');
+
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $jwtToken',
+    };
+
+    final Map<String, dynamic> body = {
+      'type': 'profile',
+      'imageBase64': "data:image/jpeg;base64,$base64Image",
+      'userId': user.id,
+    };
+
+    final http.Response response = await http.post(
+      uri,
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } else {
+      throw Exception('Failed to update profile picture');
+    }
+  }
+
+  Future<void> uploadNotification(
+      String token, String title, String comment, String jwtToken) async {
+    // Define the API endpoint
+    Uri uri = Uri.http(Environment.API_URL_OLD, '/api/v1/notification');
+
+    // Create the request headers
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $jwtToken',
+    };
+
+    // Create the request body
+    Map<String, dynamic> body = {
+      'token': token,
+      'title': title,
+      'content': comment,
+    };
+
+    // Send the POST request to the API endpoint
+    final response =
+        await http.post(uri, headers: headers, body: jsonEncode(body));
+
+    // Check the response status code
+    if (response.statusCode == 200) {
+      print('Notification uploaded successfully');
+    } else {
+      throw Exception('Failed to upload notification');
     }
   }
 }

@@ -1,4 +1,7 @@
 class Environment {
-  static const String API_URL = "http://192.168.56.1:3000/";
-  static const String API_URL_OLD = "192.168.56.1:3000";
+  // When using GetXConnection, make sure use of this
+  static const String API_URL = "http://178.128.223.115:8080/";
+
+  // This should be used when using GetXConnection
+  static const String API_URL_OLD = "178.128.223.115:8080";
 }

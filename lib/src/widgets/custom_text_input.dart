@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+
 import '../const/colors.dart';
 
 class CustomTextInput extends StatelessWidget {
+  final String hintText;
+  final EdgeInsets padding;
+  final TextEditingController textController;
+  final TextInputType textInputType;
+
   CustomTextInput({
     required this.hintText,
     this.padding = const EdgeInsets.only(left: 40),
@@ -9,11 +15,6 @@ class CustomTextInput extends StatelessWidget {
     required this.textInputType,
     required Key key,
   }) : super(key: key);
-
-  final String hintText;
-  final EdgeInsets padding;
-  final TextEditingController textController;
-  final TextInputType textInputType;
 
   @override
   Widget build(BuildContext context) {

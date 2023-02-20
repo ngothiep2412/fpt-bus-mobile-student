@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
 import '../../utils/helper.dart';
 import './../../global/global.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
@@ -17,10 +16,10 @@ class _SplashScreenState extends State<SplashScreen> {
     _timer = Timer(const Duration(seconds: 3), () async {
       if (await fAuth.currentUser != null) {
         currentFirebaseUser = fAuth.currentUser;
-        Get.toNamed('/home');
+        Get.offNamedUntil('/home', (route) => false);
       } else {
         //send user to home screen
-        Get.toNamed('/');
+        Get.offNamedUntil('/', (route) => false);
       }
     });
   }
@@ -63,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
       alignment: Alignment.center,
       child: Image.asset(
         Helper.getAssetName("fbus.png"),
-        width: 260,
+        width: 280,
       ),
     );
   }

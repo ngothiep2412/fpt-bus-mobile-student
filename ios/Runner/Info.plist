@@ -4,6 +4,12 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>I need permissions to access the photo gallery</string>
+	<key>NSCameraUsageDescription</key>
+	<string>I need permissions to access the camera</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>I need permissions to access the microphone</string>
 	<key>CFBundleDisplayName</key>
 	<string>Fbus App</string>
 	<key>CFBundleExecutable</key>

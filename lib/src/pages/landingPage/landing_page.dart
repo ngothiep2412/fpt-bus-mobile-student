@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
 import './landing_controller.dart';
 import './../../const/colors.dart';
 import './../../utils/helper.dart';
@@ -24,25 +25,42 @@ class LandingPage extends StatelessWidget {
   }
 
   Widget _loginBackground(BuildContext context) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: ClipPath(
-        clipper: CustomClipperAppBar(),
-        child: Container(
+    return Stack(
+      children: [
+        Container(
           width: double.infinity,
-          height: Helper.getScreenHeight(context) * 0.45,
-          decoration: ShapeDecoration(
-            color: AppColor.orange,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          child: Image.asset(
-            Helper.getAssetName("login_bg.png"),
-            fit: BoxFit.cover,
+          height: Helper.getScreenHeight(context) * 0.44,
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(72, 174, 158, 158),
+                offset: Offset(0, 15),
+                blurRadius: 20,
+              ),
+            ],
           ),
         ),
-      ),
+        Align(
+          alignment: Alignment.topCenter,
+          child: ClipPath(
+            clipper: CustomClipperAppBar(),
+            child: Container(
+              width: double.infinity,
+              height: Helper.getScreenHeight(context) * 0.44,
+              decoration: ShapeDecoration(
+                color: AppColor.orange,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Image.asset(
+                Helper.getAssetName("login_bg.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -51,7 +69,7 @@ class LandingPage extends StatelessWidget {
       alignment: Alignment.center,
       child: Image.asset(
         Helper.getAssetName("fbus.png"),
-        width: 260,
+        width: 280,
       ),
     );
   }
@@ -65,8 +83,8 @@ class LandingPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(children: [
           _textSlogan(),
-          const Spacer(
-            flex: 2,
+          const SizedBox(
+            height: 50,
           ),
           _btnLoginByStudent(),
           const SizedBox(
@@ -84,9 +102,9 @@ class LandingPage extends StatelessWidget {
   Widget _textSlogan() {
     return const Flexible(
       child: Text(
-        "Travel with ease with online bus ticket booking.",
+        "Travel with ease with online bus booking.",
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 12),
+        style: TextStyle(fontSize: 16),
       ),
     );
   }
@@ -101,7 +119,7 @@ class LandingPage extends StatelessWidget {
             AppColor.orange,
           ),
         ),
-        onPressed: () => con.login(),
+        onPressed: () => con.loginGoogle(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

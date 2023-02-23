@@ -1,10 +1,9 @@
 import 'dart:convert';
+import 'package:fbus_app/src/environment/environment.dart';
+import 'package:fbus_app/src/models/response_api.dart';
+import 'package:fbus_app/src/models/users.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
-import './../environment/environment.dart';
-import './../models/response_api.dart';
-import './../models/users.dart';
 
 class UsersProviders extends GetConnect {
   String url = '${Environment.API_URL}api/users';

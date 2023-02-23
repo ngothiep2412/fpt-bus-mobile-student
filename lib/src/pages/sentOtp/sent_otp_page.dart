@@ -1,8 +1,8 @@
+import 'package:fbus_app/src/core/const/colors.dart';
+import 'package:fbus_app/src/pages/sentOtp/sent_otp_controller.dart';
+import 'package:fbus_app/src/widgets/otp_text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import './../../const/colors.dart';
-import './../../widgets/otp_text_input.dart';
-import './../../pages/sentOtp/sent_otp_controller.dart';
 
 class SendOTPPage extends StatelessWidget {
   SendOTPController con = Get.put(SendOTPController());

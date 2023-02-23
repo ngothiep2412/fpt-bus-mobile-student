@@ -1,6 +1,5 @@
+import 'package:fbus_app/src/core/const/colors.dart';
 import 'package:flutter/material.dart';
-
-import '../const/colors.dart';
 
 class CustomTextInput extends StatelessWidget {
   final String hintText;

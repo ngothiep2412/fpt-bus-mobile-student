@@ -1,10 +1,10 @@
+import 'package:fbus_app/src/core/const/colors.dart';
+import 'package:fbus_app/src/utils/helper.dart';
+import 'package:fbus_app/src/widgets/custom_text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'login_controller.dart';
-import './../../const/colors.dart';
-import './../../utils/helper.dart';
-import './../../widgets/custom_text_input.dart';
 
 class LoginPage extends StatelessWidget {
   LoginController con = Get.put(LoginController());

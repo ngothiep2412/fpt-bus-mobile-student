@@ -1,7 +1,6 @@
+import 'package:fbus_app/src/providers/users_provider.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
-import './../../providers/users_provider.dart';
 
 class LoginController extends GetxController {
   TextEditingController phoneController = TextEditingController();
@@ -55,7 +54,7 @@ class LoginController extends GetxController {
   }
 
   void goToHomePage() {
-    Get.toNamed('/home');
+    Get.toNamed('/navigation');
   }
 
   bool isValidForm(phone) {

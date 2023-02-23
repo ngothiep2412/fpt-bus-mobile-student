@@ -1,3 +1,16 @@
+import 'package:fbus_app/src/models/users.dart';
+import 'package:fbus_app/src/pages/landingPage/landing_page.dart';
+import 'package:fbus_app/src/pages/loginByDriver/login.dart';
+import 'package:fbus_app/src/pages/onboard/intro_page.dart';
+import 'package:fbus_app/src/pages/sentOtp/sent_otp_page.dart';
+import 'package:fbus_app/src/pages/splashScreen/splash_screen.dart';
+import 'package:fbus_app/src/pages/student/appBar/student_navigation_bar.dart';
+import 'package:fbus_app/src/pages/student/listBus/bus_list_page.dart';
+import 'package:fbus_app/src/pages/student/notifications/notification_page.dart';
+import 'package:fbus_app/src/pages/student/profile/info/profile_page.dart';
+import 'package:fbus_app/src/pages/student/profile/update/update_profile_page.dart';
+import 'package:fbus_app/src/providers/push_notifications_provider.dart';
+import 'package:fbus_app/src/utils/firebase_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,17 +19,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '././src/const/colors.dart';
-import '././src/models/users.dart';
-import '././src/pages/home/home_page.dart';
-import '././src/pages/landingPage/landing_page.dart';
-import '././src/pages/loginByDriver/login.dart';
-import '././src/pages/onboard/intro_page.dart';
-import '././src/pages/profile/profile_page.dart';
-import '././src/pages/sentOtp/sent_otp_page.dart';
-import '././src/pages/splashScreen/splash_screen.dart';
-import '././src/providers/push_notifications_provider.dart';
-import '././src/utils/firebase_config.dart';
+import 'src/core/const/colors.dart';
 
 // Get userSession from getStorage to use.
 UserModel userSession = UserModel.fromJson(GetStorage().read('user') ?? {});
@@ -30,20 +33,28 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 const storage = FlutterSecureStorage();
-void main() async {
+
+Future<void> initializeFirebase() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  // Initialize Firebase and wait for it to complete
   await Firebase.initializeApp(
     name: 'f-bus',
     options: FirebaseConfig.currentPlatform,
   );
+
+  // Get the Firebase Messaging token and write it to storage
+  final token = await FirebaseMessaging.instance.getToken();
+  await storage.write(key: 'firebaseToken', value: token);
+  print('getToken: $token');
+
+  // Set the onBackgroundMessage handler and initialize push notifications
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   pushNotificationsProvider.initPushNotifications();
-  FirebaseMessaging.instance.getToken().then((value) async {
-    await storage.write(key: 'firebaseToken', value: value);
-    print('getToken: $value');
-  });
+}
 
+void main() async {
+  await initializeFirebase();
   runApp(const MyApp());
 }
 
@@ -90,10 +101,19 @@ class _MyAppState extends State<MyApp> {
               GetPage(name: '/', page: () => LandingPage()),
               GetPage(name: '/intro', page: () => IntroPage()),
               GetPage(name: '/splash', page: () => SplashScreen()),
-              GetPage(name: '/home', page: () => HomePage()),
-              GetPage(name: '/sent-otp', page: () => SendOTPPage()),
               GetPage(name: '/login-by-driver', page: () => LoginPage()),
-              GetPage(name: '/profile', page: () => ProfilePage()),
+              GetPage(name: '/sent-otp', page: () => SendOTPPage()),
+              GetPage(name: '/navigation', page: () => StudentNavigationBar()),
+              GetPage(
+                  name: '/navigation/home/notifications',
+                  page: () => NotificationPage()),
+              GetPage(
+                  name: '/navigation/home/list-bus', page: () => BusListPage()),
+              GetPage(name: '/navigation/profile', page: () => ProfilePage()),
+              GetPage(
+                  name: '/navigation/profile/update',
+                  page: () => UpdateProfilePage()),
+              GetPage(name: '/navigation/profile', page: () => ProfilePage())
             ],
             theme: ThemeData(
                 fontFamily: "Metropolis",

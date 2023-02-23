@@ -13,6 +13,10 @@ class Helper {
     return "assets/images/$fileName";
   }
 
+  static String getAssetIconName(String? fileName) {
+    return "assets/icon/$fileName";
+  }
+
   static TextTheme getTheme(BuildContext context) {
     return Theme.of(context).textTheme;
   }

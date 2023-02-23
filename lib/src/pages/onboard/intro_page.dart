@@ -1,10 +1,9 @@
+import 'package:fbus_app/src/core/const/colors.dart';
+import 'package:fbus_app/src/models/onboard_model.dart';
+import 'package:fbus_app/src/utils/helper.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import './../../const/colors.dart';
-import './../../models/onboard_model.dart';
-import './../../utils/helper.dart';
 
 class IntroPage extends StatefulWidget {
   @override

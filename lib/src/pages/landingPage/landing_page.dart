@@ -1,9 +1,8 @@
+import 'package:fbus_app/src/core/const/colors.dart';
+import 'package:fbus_app/src/pages/landingPage/landing_controller.dart';
+import 'package:fbus_app/src/utils/helper.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
-import './landing_controller.dart';
-import './../../const/colors.dart';
-import './../../utils/helper.dart';
 
 class LandingPage extends StatelessWidget {
   LandingController con = Get.put(LandingController());
@@ -33,8 +32,8 @@ class LandingPage extends StatelessWidget {
           decoration: const BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Color.fromARGB(72, 174, 158, 158),
-                offset: Offset(0, 15),
+                color: Color.fromARGB(210, 238, 125, 55),
+                offset: Offset(0, 10),
                 blurRadius: 20,
               ),
             ],
@@ -48,9 +47,19 @@ class LandingPage extends StatelessWidget {
               width: double.infinity,
               height: Helper.getScreenHeight(context) * 0.44,
               decoration: ShapeDecoration(
-                color: AppColor.orange,
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    AppColor.garidentColorFirst,
+                    AppColor.garidentColorSecond,
+                  ],
+                ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
                 ),
               ),
               child: Image.asset(
@@ -116,7 +125,7 @@ class LandingPage extends StatelessWidget {
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
-            AppColor.orange,
+            Color.fromARGB(255, 244, 124, 64),
           ),
         ),
         onPressed: () => con.loginGoogle(),

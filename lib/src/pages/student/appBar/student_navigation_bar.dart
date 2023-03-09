@@ -2,8 +2,7 @@ import 'package:fbus_app/src/core/const/colors.dart';
 import 'package:fbus_app/src/pages/student/appBar/student_navigation_bar_controller.dart';
 import 'package:fbus_app/src/pages/student/home/home_page.dart';
 import 'package:fbus_app/src/pages/student/more/more_page.dart';
-import 'package:fbus_app/src/pages/student/notifications/notification_page.dart';
-import 'package:fbus_app/src/pages/student/profile/info/profile_page.dart';
+import 'package:fbus_app/src/pages/student/ticket/ticket_page.dart';
 import 'package:fbus_app/src/utils/custom_animated_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +20,7 @@ class StudentNavigationBar extends StatelessWidget {
             index: con.indexTab.value,
             children: [
               HomePage(),
-              HomePage(),
+              TicketPage(),
               MorePage(),
             ],
           )),

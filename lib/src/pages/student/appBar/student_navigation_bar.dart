@@ -1,6 +1,8 @@
 import 'package:fbus_app/src/core/const/colors.dart';
 import 'package:fbus_app/src/pages/student/appBar/student_navigation_bar_controller.dart';
 import 'package:fbus_app/src/pages/student/home/home_page.dart';
+import 'package:fbus_app/src/pages/student/more/more_page.dart';
+import 'package:fbus_app/src/pages/student/notifications/notification_page.dart';
 import 'package:fbus_app/src/pages/student/profile/info/profile_page.dart';
 import 'package:fbus_app/src/utils/custom_animated_bottom_bar.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +22,7 @@ class StudentNavigationBar extends StatelessWidget {
             children: [
               HomePage(),
               HomePage(),
-              HomePage(),
-              ProfilePage(),
+              MorePage(),
             ],
           )),
     );
@@ -49,16 +50,16 @@ class StudentNavigationBar extends StatelessWidget {
                 title: Text("My Tickets"),
                 activeColor: AppColor.orange,
                 inactiveColor: Colors.black),
+            // BottomNavyBarItem(
+            //     textAlign: TextAlign.center,
+            //     icon: Icon(Ionicons.notifications_outline),
+            //     title: Text("Notifications"),
+            //     activeColor: AppColor.orange,
+            //     inactiveColor: Colors.black),
             BottomNavyBarItem(
                 textAlign: TextAlign.center,
-                icon: Icon(Ionicons.notifications_outline),
-                title: Text("Notifications"),
-                activeColor: AppColor.orange,
-                inactiveColor: Colors.black),
-            BottomNavyBarItem(
-                textAlign: TextAlign.center,
-                icon: Icon(Ionicons.person_outline),
-                title: Text("Profile"),
+                icon: Icon(Ionicons.settings_outline),
+                title: Text("More"),
                 activeColor: AppColor.orange,
                 inactiveColor: Colors.black),
           ],

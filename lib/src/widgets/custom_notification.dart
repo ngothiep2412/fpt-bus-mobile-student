@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 
 class NotificationIcon extends StatelessWidget {
@@ -13,7 +14,7 @@ class NotificationIcon extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            print('Notifications');
+            Get.toNamed('/navigation/home/notifications');
           },
           child: Icon(
             Ionicons.notifications,
@@ -23,10 +24,10 @@ class NotificationIcon extends StatelessWidget {
         ),
         if (notificationCount > 0)
           Positioned(
-            left: 12,
+            left: 8,
             top: 0,
             child: Container(
-              padding: EdgeInsets.all(2),
+              padding: EdgeInsets.all(3),
               decoration: BoxDecoration(
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(10),
@@ -36,7 +37,9 @@ class NotificationIcon extends StatelessWidget {
                 minHeight: 18,
               ),
               child: Text(
-                notificationCount.toString(),
+                notificationCount > 99
+                    ? notificationCount.toString()
+                    : notificationCount.toString(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 12,

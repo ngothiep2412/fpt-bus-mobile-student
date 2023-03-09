@@ -1,6 +1,5 @@
 import 'package:fbus_app/src/core/const/colors.dart';
 import 'package:fbus_app/src/core/helpers/image_helper.dart';
-import 'package:fbus_app/src/models/users.dart';
 import 'package:fbus_app/src/pages/student/home/home_controller.dart';
 import 'package:fbus_app/src/utils/helper.dart';
 import 'package:fbus_app/src/widgets/app_bar_container.dart';
@@ -18,22 +17,20 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   HomeController con = Get.put(HomeController());
 
-  // @override
-  // void dispose() {
-  //   con.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    con.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.backgroundScaffoldColor,
       appBar: CustomAppBar(
         titleString: "Hi, ${con.user.value.fullname}",
         context: context,
         implementLeading: false,
         subTitleString: "What are you looking for next?",
-        logout: false,
       ),
       body: Stack(
         children: [
@@ -64,16 +61,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    CustomDropdown(
-                      controller: con.fromTextEditting,
-                      text: "Departure",
-                    ),
                     const SizedBox(
                       height: 20,
                     ),
                     CustomDropdown(
-                      controller: con.toTextEditting,
-                      text: "Destination",
+                      controller: con.routeTextEditting,
+                      text: "Route",
                     ),
                     SizedBox(
                       height: 20,
@@ -151,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                       data: 'Search the bus',
                       color: Colors.white,
                       onTap: () {
-                        con.save(context);
+                        con.searchTheBus(context);
                       },
                     ),
                   ],

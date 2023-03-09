@@ -30,7 +30,7 @@ class SendOTPController extends GetxController {
   }
 
   void gotoMainPage() {
-    Get.toNamed('/navigation');
+    Get.toNamed('/home-driver');
   }
 
   void sentOtpAgain() {}

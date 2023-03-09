@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fbus_app/src/core/const/colors.dart';
 import 'package:fbus_app/src/models/response_api.dart';
 import 'package:fbus_app/src/models/users.dart';
+import 'package:fbus_app/src/pages/student/profile/info/profile_controller.dart';
 import 'package:fbus_app/src/providers/users_provider.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +12,21 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
-UserModel userSession = UserModel.fromJson(GetStorage().read('user') ?? {});
-FlutterSecureStorage storage = FlutterSecureStorage();
-
 class UpdateProfileController extends GetxController {
-  TextEditingController nameController =
-      TextEditingController(text: userSession.fullname);
-  TextEditingController phoneController =
-      TextEditingController(text: userSession.phoneNumber);
+  UserModel userSession = UserModel.fromJson(GetStorage().read('user') ?? {});
+  FlutterSecureStorage storage = FlutterSecureStorage();
+
+  var user = UserModel.fromJson(GetStorage().read('user') ?? {}).obs;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+  ProfileController profileController = Get.find();
+
+  UpdateProfileController() {
+    print('USER SESION: ${GetStorage().read('user')}');
+    nameController.text = userSession.fullname ?? '';
+    phoneController.text = userSession.phoneNumber ?? '';
+  }
 
   final RegExp phoneExp = RegExp(r'^[0-9]+$');
 
@@ -29,7 +37,8 @@ class UpdateProfileController extends GetxController {
   void updateInfo(BuildContext context) async {
     String name = nameController.text;
     String phone = phoneController.text;
-
+    print(
+        'updateProfileController.user.value: ${profileController.user.value.fullname}');
     if (isValidForm(name, phone)) {
       ProgressDialog progressDialog = ProgressDialog(context: context);
 
@@ -51,6 +60,10 @@ class UpdateProfileController extends GetxController {
         status: userSession.status,
         studentId: userSession.studentId,
       );
+      print('myUser ${myUser.roleName}');
+      print('name $name');
+      print('phone $phone');
+
       if (imageFile == null) {
         await Future.delayed(Duration(milliseconds: 500));
         // api

@@ -13,15 +13,10 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.backgroundScaffoldColor,
       appBar: CustomAppBar(
-          context: context,
-          titleString: "My Profile",
-          implementLeading: false,
-          logout: true,
-          logoutOnPressed: () {
-            con.signOut();
-          }),
+        context: context,
+        titleString: "My Profile",
+      ),
       body: Stack(
         children: [
           SafeArea(

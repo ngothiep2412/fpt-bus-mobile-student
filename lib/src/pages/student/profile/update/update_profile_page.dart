@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-UserModel userSession = UserModel.fromJson(GetStorage().read('user') ?? {});
-
 class UpdateProfilePage extends StatelessWidget {
   UpdateProfileController con = Get.put(UpdateProfileController());
   @override
@@ -19,7 +17,7 @@ class UpdateProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         context: context,
-        titleString: "Profile",
+        titleString: "Update Profile",
         implementLeading: true,
       ),
       body: Stack(
@@ -102,10 +100,10 @@ class UpdateProfilePage extends StatelessWidget {
                   ? CircleAvatar(
                       backgroundImage: FileImage(con.imageFile!),
                     )
-                  : userSession.profileImg != null
+                  : con.user.value.profileImg != null
                       ? FadeInImage.memoryNetwork(
                           placeholder: kTransparentImage,
-                          image: userSession.profileImg ?? '',
+                          image: con.user.value.profileImg ?? '',
                           fit: BoxFit.cover,
                         )
                       : Image.asset(
@@ -164,7 +162,7 @@ class UpdateProfilePage extends StatelessWidget {
 
   Widget _textEmail() {
     return Text(
-      "${userSession.email}",
+      "${con.user.value.email}",
       style: const TextStyle(
         color: AppColor.secondary,
         fontWeight: FontWeight.normal,

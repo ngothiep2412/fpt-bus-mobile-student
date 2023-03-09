@@ -90,7 +90,7 @@ class UsersProviders extends GetConnect {
     if (response.statusCode == 200) {
       print('Notification uploaded successfully');
     } else {
-      throw Exception('Failed to upload notification');
+      throw Error();
     }
   }
 }

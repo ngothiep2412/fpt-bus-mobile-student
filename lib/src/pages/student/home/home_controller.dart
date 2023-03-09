@@ -10,11 +10,10 @@ FlutterSecureStorage storage = FlutterSecureStorage();
 class HomeController extends GetxController {
   var user = UserModel.fromJson(GetStorage().read('user') ?? {}).obs;
   UsersProviders usersProviders = UsersProviders();
-  final fromTextEditting = TextEditingController();
-  final toTextEditting = TextEditingController();
+  final routeTextEditting = TextEditingController();
   DateTime? selectedDate;
 
-  void save(BuildContext context) {
+  void searchTheBus(BuildContext context) {
     // showDialog(
     //   context: context,
     //   builder: (BuildContext context) => ProgressDialog(
@@ -26,10 +25,10 @@ class HomeController extends GetxController {
     //   Navigator.of(context, rootNavigator: true).pop();
     // });
 
-    print('fromTextEditting: ${fromTextEditting.text}');
-    print('fromTextEditting: ${toTextEditting.text}');
+    print('routeTextEditting: ${routeTextEditting.text}');
     print('_selectedDate2322: $selectedDate');
-    Get.toNamed('/navigation/home/list-bus');
+    // Get.toNamed('/navigation/home/list-bus');
+    Get.toNamed('/navigation/home/booking-bus');
   }
 
   // This function is designed for pushing notifications.
@@ -41,7 +40,7 @@ class HomeController extends GetxController {
 
     try {
       usersProviders.uploadNotification(
-          fireToken!, "Test notification", "test", jwtToken!);
+          fireToken!, "Test notification 222", "test", jwtToken!);
     } catch (err) {
       // Show a SnackBar with the error message
       Get.snackbar('Error', 'Failed to upload notification');

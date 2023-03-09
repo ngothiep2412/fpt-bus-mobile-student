@@ -1,5 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class PushNotificationsProvider {
   AndroidNotificationChannel channel = const AndroidNotificationChannel(
@@ -26,7 +29,7 @@ class PushNotificationsProvider {
     );
   }
 
-  void onMessageListener() async {
+  void onMessageListener(BuildContext context) async {
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? message) {
@@ -39,9 +42,10 @@ class PushNotificationsProvider {
       print('NEW NOTIFICATION IN FOREGROUND');
       showNotification(message);
     });
-
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
+      if (message.notification!.body != null) {
+        Get.toNamed('/navigation/home/notifications');
+      }
     });
   }
 
@@ -49,10 +53,20 @@ class PushNotificationsProvider {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null) {
+      String sentTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(
+        DateTime.fromMillisecondsSinceEpoch(
+          message.sentTime?.millisecondsSinceEpoch ??
+              DateTime.now().millisecondsSinceEpoch,
+        ),
+      );
+
+      // Add the sent time to the notification body
+      String notificationBody = '${notification.body} - Sent at: $sentTime';
+
       plugin.show(
         notification.hashCode,
         notification.title,
-        notification.body,
+        notificationBody,
         NotificationDetails(
           android: AndroidNotificationDetails(
             channel.id,

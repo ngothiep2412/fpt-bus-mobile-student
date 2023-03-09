@@ -10,7 +10,8 @@ class AppColor {
   static const textColor = Colors.white;
   static const Color backgroundScaffoldColor = Color(0xFFF2F2F2);
   static const Color text1Color = Color(0xFF323B4B);
-
+  static const button = Color.fromARGB(255, 248, 246, 246);
   static const garidentColorFirst = Color.fromARGB(255, 243, 153, 104);
   static const garidentColorSecond = Color.fromARGB(255, 239, 113, 55);
+  static const busdetailColor = Color.fromARGB(210, 246, 112, 51);
 }

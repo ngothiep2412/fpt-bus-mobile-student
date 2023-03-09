@@ -307,11 +307,9 @@ class _BookingBusPageState extends State<BookingBusPage> {
                               CameraUpdate.newCameraPosition(
                                 CameraPosition(
                                   target: LatLng(
+                                      double.parse(stationList[index].latitude),
                                       double.parse(
-                                          stationList[index].latitude ?? '0.0'),
-                                      double.parse(
-                                          stationList[index].longitude ??
-                                              '0.0')),
+                                          stationList[index].longitude)),
                                   zoom: 14.5,
                                   tilt: 10.0,
                                 ),
@@ -322,7 +320,7 @@ class _BookingBusPageState extends State<BookingBusPage> {
                               textStyle:
                                   const TextStyle(fontWeight: FontWeight.w600),
                             ),
-                            child: Text(stationList[index].stationName ?? ''),
+                            child: Text(stationList[index].stationName),
                           ),
                         ],
                       ),

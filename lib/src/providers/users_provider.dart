@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:fbus_app/src/environment/environment.dart';
 import 'package:fbus_app/src/models/response_api.dart';
+import 'package:fbus_app/src/models/trip_model.dart';
 import 'package:fbus_app/src/models/users.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -91,6 +92,34 @@ class UsersProviders extends GetConnect {
       print('Notification uploaded successfully');
     } else {
       throw Error();
+    }
+  }
+
+  Future<List<TripModel>> getDataTrip(
+      String jwtToken, String date, String routeId) async {
+    Uri uri = Uri.http(Environment.API_URL_OLD, '/api/v1/trip',
+        {'date': date, 'route_id': routeId});
+
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $jwtToken',
+    };
+    final http.Response response = await http.get(uri, headers: headers);
+    // Check the response status code
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body)['data'];
+      // print('DATA $data');
+      if (data != null) {
+        final trips = List<Map<String, dynamic>>.from(data);
+        print(
+            'Data: ${trips.map((trip) => TripModel.fromJson(trip)).toList()}');
+        return trips.map((trip) => TripModel.fromJson(trip)).toList();
+      }
+
+      return [];
+    } else {
+      throw Exception(
+          'Error fetching routes. Status code: ${response.statusCode}');
     }
   }
 }

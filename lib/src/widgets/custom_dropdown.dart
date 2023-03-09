@@ -154,6 +154,13 @@ class _CustomDropdownState extends State<CustomDropdown> {
               ),
             ),
           ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 14),
+            child: Divider(
+              thickness: 1,
+              color: AppColor.busdetailColor,
+            ),
+          )
         ],
       ),
     );

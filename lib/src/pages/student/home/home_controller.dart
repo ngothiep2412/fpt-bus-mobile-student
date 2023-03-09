@@ -1,9 +1,13 @@
+import 'package:fbus_app/src/core/const/colors.dart';
+import 'package:fbus_app/src/models/trip_model.dart';
 import 'package:fbus_app/src/models/users.dart';
 import 'package:fbus_app/src/providers/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 FlutterSecureStorage storage = FlutterSecureStorage();
 
@@ -13,22 +17,49 @@ class HomeController extends GetxController {
   final routeTextEditting = TextEditingController();
   DateTime? selectedDate;
 
-  void searchTheBus(BuildContext context) {
-    // showDialog(
-    //   context: context,
-    //   builder: (BuildContext context) => ProgressDialog(
-    //     message: "Finding the bus, Please wait ....",
-    //   ),
-    // );
+  void searchTheBus(BuildContext context) async {
+    String? jwtToken = await storage.read(key: 'jwtToken');
+    String date = '2001-02-01';
+    if (isValidForm(routeTextEditting.text, date)) {
+      ProgressDialog progressDialog = ProgressDialog(context: context);
 
-    // Timer(Duration(seconds: 3), () {
-    //   Navigator.of(context, rootNavigator: true).pop();
-    // });
+      progressDialog.show(
+        max: 200,
+        msg: 'Searching data...',
+        progressValueColor: Colors.white,
+        progressBgColor: AppColor.orange,
+        // msgColor: Colors.black,
+      );
 
-    print('routeTextEditting: ${routeTextEditting.text}');
-    print('_selectedDate2322: $selectedDate');
-    // Get.toNamed('/navigation/home/list-bus');
-    Get.toNamed('/navigation/home/booking-bus');
+      // Timer(Duration(seconds: 3), () {
+      //   Navigator.of(context, rootNavigator: true).pop();
+      // });
+      try {
+        if (jwtToken != null) {
+          List<TripModel> listTrip = await usersProviders.getDataTrip(
+              jwtToken, date, routeTextEditting.text);
+          if (listTrip != null) {
+            await Future.delayed(Duration(milliseconds: 500));
+            progressDialog.close();
+          }
+          print('LIST TRIP DEPARTURE: ${listTrip[0].departure}');
+          print('LIST TRIP DESTINATION: ${listTrip[0].destination}');
+          print('LIST TRIP DRIVER NAME: ${listTrip[0].driverName}');
+          print('LIST TRIP TICKET QUANTITY: ${listTrip[0].ticketQuantity}');
+        }
+      } catch (err) {
+        // Show a SnackBar with the error message
+        Get.snackbar('Error', 'Failed to search the bus');
+
+        // Navigate to the Home page
+        Get.offAllNamed('/navigation');
+      }
+
+      print('routeTextEditting: ${routeTextEditting.text}');
+
+      // Get.toNamed('/navigation/home/list-bus');
+      // Get.toNamed('/navigation/home/booking-bus');
+    }
   }
 
   // This function is designed for pushing notifications.
@@ -48,5 +79,16 @@ class HomeController extends GetxController {
       // Navigate to the Home page
       Get.offAllNamed('/navigation');
     }
+  }
+
+  bool isValidForm(String routeName, String? date) {
+    if (routeName.isEmpty) {
+      Get.snackbar('Invalid from', 'You must enter your route');
+      return false;
+    } else if (date == null) {
+      Get.snackbar('Invalid from', 'You must enter your date');
+      return false;
+    }
+    return true;
   }
 }

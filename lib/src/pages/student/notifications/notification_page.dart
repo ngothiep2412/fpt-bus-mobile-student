@@ -34,31 +34,31 @@ class _NotificationPageState extends State<NotificationPage> {
       _totalNotifications++;
     });
     // Check if the app is currently in the foreground
-    if (message.notification != null &&
-        message.notification!.title != null &&
-        message.notification!.body != null) {
-      if (message.notification!.title!.isNotEmpty &&
-          message.notification!.body!.isNotEmpty) {
-        // App is in foreground, show a dialog to notify the user
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: Text(message.notification!.title!),
-            content: Text(message.notification!.body!),
-            actions: [
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context)
-                      .pushNamed('/navigation/home/notifications');
-                },
-              ),
-            ],
-          ),
-        );
-      }
-    }
+    // if (message.notification != null &&
+    //     message.notification!.title != null &&
+    //     message.notification!.body != null) {
+    //   if (message.notification!.title!.isNotEmpty &&
+    //       message.notification!.body!.isNotEmpty) {
+    //     // App is in foreground, show a dialog to notify the user
+    //     showDialog(
+    //       context: context,
+    //       builder: (_) => AlertDialog(
+    //         title: Text(message.notification!.title!),
+    //         content: Text(message.notification!.body!),
+    //         actions: [
+    //           TextButton(
+    //             child: Text('OK'),
+    //             onPressed: () {
+    //               Navigator.of(context).pop();
+    //               Navigator.of(context)
+    //                   .pushNamed('/navigation/home/notifications');
+    //             },
+    //           ),
+    //         ],
+    //       ),
+    //     );
+    //   }
+    // }
   }
 
   @override

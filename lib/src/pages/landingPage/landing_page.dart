@@ -93,15 +93,11 @@ class LandingPage extends StatelessWidget {
         child: Column(children: [
           _textSlogan(),
           const SizedBox(
-            height: 50,
+            height: 100,
           ),
           _btnLoginByStudent(),
           const SizedBox(
             height: 20,
-          ),
-          _btnLoginByDriver(),
-          const Spacer(
-            flex: 2,
           ),
         ]),
       ),
@@ -109,7 +105,7 @@ class LandingPage extends StatelessWidget {
   }
 
   Widget _textSlogan() {
-    return const Flexible(
+    return Container(
       child: Text(
         "Travel with ease with online bus booking.",
         textAlign: TextAlign.center,
@@ -148,26 +144,6 @@ class LandingPage extends StatelessWidget {
             )
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _btnLoginByDriver() {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.white),
-          foregroundColor: MaterialStateProperty.all(AppColor.orange),
-          shape: MaterialStateProperty.all(
-            const StadiumBorder(
-              side: BorderSide(color: AppColor.orange, width: 1.5),
-            ),
-          ),
-        ),
-        onPressed: () => con.goToLoginByDriverPage(),
-        child: const Text("Login by driver"),
       ),
     );
   }

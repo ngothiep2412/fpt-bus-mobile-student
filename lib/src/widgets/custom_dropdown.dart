@@ -24,6 +24,7 @@ class CustomDropdown extends StatefulWidget {
 }
 
 class _CustomDropdownState extends State<CustomDropdown> {
+  TextEditingController controllerText = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -36,15 +37,26 @@ class _CustomDropdownState extends State<CustomDropdown> {
         composing: TextRange.empty,
       );
     });
+    controllerText.addListener(() {
+      final String text = controllerText.text;
+      controllerText.value = controllerText.value.copyWith(
+        text: text,
+        selection:
+            TextSelection(baseOffset: text.length, extentOffset: text.length),
+        composing: TextRange.empty,
+      );
+    });
   }
 
   void _onItemSelected(RouteModel item) {
     widget.controller.text = item.id;
+    controllerText.text = item.routeName;
   }
 
   @override
   void dispose() {
     widget.controller.dispose();
+    controllerText.dispose();
     super.dispose();
   }
 
@@ -55,6 +67,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.white,
+        border: Border.all(color: AppColor.busdetailColor, width: 2),
       ),
       // margin: EdgeInsets.only(bottom: 24),
       child: Row(
@@ -72,9 +85,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
                 dropdownSearchDecoration: InputDecoration(
                   labelText: widget.text,
                   labelStyle: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF323B4B),
-                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: AppColor.text1Color,
+                    fontWeight: FontWeight.w600,
                     height: 16 / 14,
                   ).copyWith(
                     fontSize: 16,
@@ -89,31 +102,30 @@ class _CustomDropdownState extends State<CustomDropdown> {
                 });
               },
               popupProps: PopupPropsMultiSelection.modalBottomSheet(
-                // isFilterOnline: true,
+                isFilterOnline: true,
                 showSelectedItems: true,
-                // showSearchBox: true,
+                showSearchBox: true,
                 title: Container(
                   margin: EdgeInsets.only(bottom: 20, left: 20),
-                  child: Text('List all routes',
+                  child: Text('List All Routes:',
                       style: TextStyle(
                         color: AppColor.busdetailColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       )),
                 ),
-
                 itemBuilder: _customPopupItemBuilder,
-                // searchFieldProps: TextFieldProps(
-                //   controller: widget.controller,
-                //   decoration: InputDecoration(
-                //     suffixIcon: IconButton(
-                //       icon: Icon(Icons.clear),
-                //       onPressed: () {
-                //         widget.controller.clear();
-                //       },
-                //     ),
-                //   ),
-                // ),
+                searchFieldProps: TextFieldProps(
+                  controller: controllerText,
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        controllerText.clear();
+                      },
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -138,29 +150,89 @@ class _CustomDropdownState extends State<CustomDropdown> {
             ),
       child: Column(
         children: [
+          Divider(
+            thickness: 1,
+            color: AppColor.busdetailColor,
+          ),
           ListTile(
             selected: isSelected,
-            title: Text('Route'),
+            title: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Route Name:',
+                    style: TextStyle(
+                      color: AppColor.busdetailColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' ${item?.routeName ?? ''}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.text1Color,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             subtitle: Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Departure: ${item?.departure ?? ''}'),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Departure:',
+                          style: TextStyle(
+                            color: AppColor.busdetailColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' ${item?.departure ?? ''}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.text1Color,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   SizedBox(height: 10),
-                  Text('Destination: ${item?.destination ?? ''}'),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Destination:',
+                          style: TextStyle(
+                            color: AppColor.busdetailColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' ${item?.destination ?? ''}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.text1Color,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   SizedBox(height: 10),
                 ],
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 14),
-            child: Divider(
-              thickness: 1,
-              color: AppColor.busdetailColor,
-            ),
-          )
         ],
       ),
     );
@@ -168,7 +240,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   Future<List<RouteModel>> getData(filter) async {
     String? jwtToken = await storage.read(key: 'jwtToken');
-    Uri uri = Uri.http(Environment.API_URL_OLD, '/api/v1/route');
+    Uri uri = Uri.http(
+        Environment.API_URL_OLD, '/api/v1/route', {"search_query": filter});
 
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -182,11 +255,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
     // Check the response status code
     if (response.statusCode == 200) {
       final data = json.decode(response.body)['data'];
-      // print('DATA $data');
       if (data != null) {
         final routes = List<Map<String, dynamic>>.from(data);
-        print(
-            'Data: ${routes.map((route) => RouteModel.fromJson(route)).toList()}');
         return routes.map((route) => RouteModel.fromJson(route)).toList();
       }
 

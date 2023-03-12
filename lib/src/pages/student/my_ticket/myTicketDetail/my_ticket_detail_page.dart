@@ -1,24 +1,42 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:fbus_app/src/core/const/colors.dart';
+import 'package:fbus_app/src/pages/student/my_ticket/myTicketDetail/my_ticket_detail_controller.dart';
+import 'package:intl/intl.dart';
+import 'package:fbus_app/src/widgets/app_bar_container.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class TicketScreen extends StatelessWidget {
+class MyTicketDetail extends StatefulWidget {
+  @override
+  State<MyTicketDetail> createState() => _MyTicketDetailState();
+}
+
+class _MyTicketDetailState extends State<MyTicketDetail> {
   // const TicketScreen({super.key});
-
   double? screenHeight;
-  double? screenWidth;
 
+  double? screenWidth;
+  MyTicketDetailController con = Get.put(MyTicketDetailController());
   @override
   Widget build(BuildContext context) {
+    print('GET DATA: ${con.ticketDetail.qrUrl}');
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
 
-    double ticketWidth = screenWidth! * 5 / 7;
-    double ticketHeight = screenHeight! * 4 / 6;
+    double ticketWidth = screenWidth! * 5 / 5.5;
+    double ticketHeight = screenHeight! * 4 / 5.5;
 
-    var validColor = Colors.redAccent;
+    var unValidColor = Colors.redAccent;
+    var validColor = Colors.greenAccent;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color.fromARGB(236, 244, 238, 238),
+      appBar: CustomAppBar(
+        titleString: 'Ticket Detail',
+        notification: false,
+        implementLeading: true,
+        context: context,
+      ),
       body: SafeArea(
           child: Center(
         child: Stack(children: [
@@ -45,35 +63,64 @@ class TicketScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w600,
+                          color: AppColor.busdetailColor,
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(width: 1.5, color: validColor)),
-                        child: Row(
-                          children: [
-                            Image.network(
-                              "https://cdn-icons-png.flaticon.com/512/262/262037.png",
-                              // "https://cdn-icons-png.flaticon.com/512/157/157977.png",
-                              width: 20,
-                              height: 20,
-                              color: validColor,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              // "valid",
-                              "Expired",
-                              style: TextStyle(
-                                  color: validColor,
-                                  fontWeight: FontWeight.w500),
+                      con.ticketDetail.status == true
+                          ? Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                      width: 1.5, color: validColor)),
+                              child: Row(
+                                children: [
+                                  Image.network(
+                                    "https://cdn-icons-png.flaticon.com/512/157/157977.png",
+                                    width: 20,
+                                    height: 20,
+                                    color: validColor,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    // "valid",
+                                    "Active",
+                                    style: TextStyle(
+                                        color: validColor,
+                                        fontWeight: FontWeight.w500),
+                                  )
+                                ],
+                              ),
                             )
-                          ],
-                        ),
-                      )
+                          : Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                      width: 1.5, color: unValidColor)),
+                              child: Row(
+                                children: [
+                                  Image.network(
+                                    "https://cdn-icons-png.flaticon.com/512/262/262037.png",
+                                    width: 20,
+                                    height: 20,
+                                    color: unValidColor,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    // "valid",
+                                    "Expired",
+                                    style: TextStyle(
+                                        color: unValidColor,
+                                        fontWeight: FontWeight.w500),
+                                  )
+                                ],
+                              ),
+                            )
                     ],
                   ),
                   SizedBox(
@@ -92,15 +139,18 @@ class TicketScreen extends StatelessWidget {
                           child: Text.rich(TextSpan(
                               text: "from  ",
                               style: TextStyle(
-                                  color: Colors.black.withOpacity(0.3),
-                                  fontSize: 13),
+                                color: Colors.black.withOpacity(0.3),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: "FPT University",
+                                    text: con.ticketDetail.trip.route.departure,
                                     style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500))
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColor.text1Color,
+                                    ))
                               ])),
                         ),
                         Image.network(
@@ -114,15 +164,19 @@ class TicketScreen extends StatelessWidget {
                           child: Text.rich(TextSpan(
                               text: "to  ",
                               style: TextStyle(
-                                  color: Colors.black.withOpacity(0.3),
-                                  fontSize: 13),
+                                color: Colors.black.withOpacity(0.3),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: "Vinhome Grand Park",
+                                    text:
+                                        con.ticketDetail.trip.route.destination,
                                     style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500))
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColor.text1Color,
+                                    ))
                               ])),
                         ),
                       ],
@@ -151,17 +205,21 @@ class TicketScreen extends StatelessWidget {
                                   Text(
                                     "Student name",
                                     style: TextStyle(
-                                        color: Colors.black.withOpacity(0.3),
-                                        fontSize: 12),
+                                      color: Colors.black.withOpacity(0.3),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 4,
                                   ),
                                   Text(
-                                    "Nguyễn Trọng Nguyên Vũ (K15 HCM)",
+                                    con.user.fullname ?? '',
                                     style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColor.text1Color,
+                                    ),
                                   )
                                 ],
                               ),
@@ -181,10 +239,13 @@ class TicketScreen extends StatelessWidget {
                                     height: 4,
                                   ),
                                   Text(
-                                    "24-12-2022",
+                                    DateFormat('yyyy-MM-dd').format(
+                                        con.ticketDetail.trip.departureDate),
                                     style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColor.text1Color,
+                                    ),
                                   )
                                 ],
                               ),
@@ -206,17 +267,21 @@ class TicketScreen extends StatelessWidget {
                                   Text(
                                     "Driver name",
                                     style: TextStyle(
-                                        color: Colors.black.withOpacity(0.3),
-                                        fontSize: 12),
+                                      color: Colors.black.withOpacity(0.3),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 4,
                                   ),
                                   Text(
-                                    "Nguyễn Thanh Tùng",
+                                    con.ticketDetail.trip.bus.user.fullname,
                                     style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColor.text1Color,
+                                    ),
                                   )
                                 ],
                               ),
@@ -229,17 +294,21 @@ class TicketScreen extends StatelessWidget {
                                   Text(
                                     "Time",
                                     style: TextStyle(
-                                        color: Colors.black.withOpacity(0.3),
-                                        fontSize: 12),
+                                      color: Colors.black.withOpacity(0.3),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 4,
                                   ),
                                   Text(
-                                    "12:12:12",
+                                    con.ticketDetail.trip.departureTime,
                                     style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColor.text1Color,
+                                    ),
                                   )
                                 ],
                               ),
@@ -261,7 +330,15 @@ class TicketScreen extends StatelessWidget {
                       borderType: BorderType.RRect,
                       radius: Radius.circular(4),
                       padding: EdgeInsets.all(6),
-                      child: Text("51B-273-39"),
+                      color: AppColor.busdetailColor,
+                      child: Text(
+                        con.ticketDetail.trip.bus.licensePlate,
+                        style: TextStyle(
+                          color: AppColor.text1Color,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -270,9 +347,9 @@ class TicketScreen extends StatelessWidget {
                   Container(
                     alignment: Alignment.center,
                     child: Image.network(
-                      "https://pngimg.com/uploads/qr_code/qr_code_PNG26.png",
-                      width: 120,
-                      height: 120,
+                      con.ticketDetail.qrUrl,
+                      width: 180,
+                      height: 180,
                     ),
                   ),
                 ],
@@ -286,7 +363,7 @@ class TicketScreen extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: Color.fromARGB(238, 239, 235, 235),
                   borderRadius: BorderRadius.circular(100),
                 ),
               )),
@@ -297,7 +374,7 @@ class TicketScreen extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: Color.fromARGB(238, 239, 235, 235),
                   borderRadius: BorderRadius.circular(100),
                 ),
               )),

@@ -1,9 +1,13 @@
 import 'package:fbus_app/src/core/const/colors.dart';
 import 'package:fbus_app/src/core/helpers/image_helper.dart';
 import 'package:fbus_app/src/utils/helper.dart';
+import 'package:fbus_app/src/widgets/app_bar_container_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ionicons/ionicons.dart';
+
+AppBarContainerController con = Get.put(AppBarContainerController());
 
 class CustomAppBar extends AppBar {
   final String? titleString;
@@ -14,6 +18,7 @@ class CustomAppBar extends AppBar {
   final bool implementTrailing;
   final BuildContext context;
   final bool notification;
+  final bool home;
 
   CustomAppBar({
     Key? key,
@@ -25,6 +30,7 @@ class CustomAppBar extends AppBar {
     this.implementLeading = true,
     this.implementTrailing = true,
     this.notification = true,
+    this.home = false,
   }) : super(
           key: key,
           title: titleString != null && notification == true
@@ -73,18 +79,18 @@ class CustomAppBar extends AppBar {
                               size: 30,
                               color: Colors.white,
                             ),
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: Container(
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
+                            // Positioned(
+                            //   top: 0,
+                            //   right: 0,
+                            //   child: Container(
+                            //     width: 10,
+                            //     height: 10,
+                            //     decoration: BoxDecoration(
+                            //       shape: BoxShape.circle,
+                            //       color: Colors.red,
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -153,7 +159,26 @@ class CustomAppBar extends AppBar {
                     ),
                   ],
                 )
-              : null,
+              : home
+                  ? Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => {con.removeALl()},
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Container(
+                              // padding: EdgeInsets.all(10.0),
+                              child: Icon(
+                                Ionicons.home,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : null,
           actions: implementTrailing
               ? [
                   GestureDetector(

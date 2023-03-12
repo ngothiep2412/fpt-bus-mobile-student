@@ -16,6 +16,7 @@ class ProfilePage extends StatelessWidget {
       appBar: CustomAppBar(
         context: context,
         titleString: "My Profile",
+        notification: false,
       ),
       body: Stack(
         children: [

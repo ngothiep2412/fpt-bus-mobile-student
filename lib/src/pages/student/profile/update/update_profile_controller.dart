@@ -63,21 +63,32 @@ class UpdateProfileController extends GetxController {
       print('myUser ${myUser.roleName}');
       print('name $name');
       print('phone $phone');
-
+      final box = GetStorage();
+      String jwtToken = box.read('jwtToken');
       if (imageFile == null) {
-        await Future.delayed(Duration(milliseconds: 500));
-        // api
-        // Get.snackbar('Finished process', responseApi.message ?? '');
+        ResponseApi responseApi = await usersProviders
+            .updateProfileWithoutPicture(userSession, jwtToken);
+        final dataUser = responseApi.data;
+        UserModel userUpdate = UserModel(
+          email: dataUser['email'],
+          fullname: dataUser['fullname'],
+          id: dataUser['id'],
+          phoneNumber: dataUser['phone_number'],
+          profileImg: dataUser['profile_img'],
+          roleName: dataUser['RoleType']['role_name'],
+          status: dataUser['status'],
+          studentId: dataUser['student_id'],
+        );
+        GetStorage().write('user', userUpdate);
         progressDialog.close();
-        Get.toNamed('/navigation');
+        Get.snackbar("Succesfully", "Updated your information Succesfully!");
+        Get.toNamed('/profile');
       } else {
         // String? jwtToken = await storage.read(key: 'jwtToken');
         List<int> imageBytes = await imageFile!.readAsBytes();
         String base64Image = base64Encode(imageBytes);
         print('base64Image $base64Image');
-        final box = GetStorage();
         // String? jwtToken = await storage.read(key: 'jwtToken');
-        String jwtToken = box.read('jwtToken');
         ResponseApi responseApi = await usersProviders.updateProfilePicture(
             userSession, base64Image, jwtToken);
         // final data = responseApi['data'];
@@ -164,7 +175,7 @@ class UpdateProfileController extends GetxController {
   ) {
     if (phone.isEmpty) {
       Get.snackbar('Invalid from', 'You must enter your phone');
-      return true;
+      return false;
     } else {
       if (phoneExp.hasMatch(phone) == false) {
         Get.snackbar('Invalid from', 'You must enter number');

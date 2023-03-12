@@ -1,8 +1,9 @@
 import 'package:fbus_app/src/core/const/colors.dart';
-import 'package:fbus_app/src/pages/student/appBar/student_navigation_bar_controller.dart';
 import 'package:fbus_app/src/pages/student/home/home_page.dart';
+import 'package:fbus_app/src/pages/student/navigation/student_navigation_bar_controller.dart';
+import 'package:fbus_app/src/pages/student/searchTrip/search_trip_page.dart';
 import 'package:fbus_app/src/pages/student/more/more_page.dart';
-import 'package:fbus_app/src/pages/student/ticket/ticket_page.dart';
+import 'package:fbus_app/src/theme/colors.dart';
 import 'package:fbus_app/src/utils/custom_animated_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +21,7 @@ class StudentNavigationBar extends StatelessWidget {
             index: con.indexTab.value,
             children: [
               HomePage(),
-              TicketPage(),
+              SearchTripPage(),
               MorePage(),
             ],
           )),
@@ -41,13 +42,13 @@ class StudentNavigationBar extends StatelessWidget {
                 textAlign: TextAlign.center,
                 icon: Icon(Ionicons.home_outline),
                 title: Text("Home"),
-                activeColor: AppColor.orange,
+                activeColor: AppColor.busdetailColor,
                 inactiveColor: Colors.black),
             BottomNavyBarItem(
                 textAlign: TextAlign.center,
-                icon: Icon(Ionicons.ticket_outline),
-                title: Text("My Tickets"),
-                activeColor: AppColor.orange,
+                icon: Icon(Ionicons.search),
+                title: Text("Search Trip"),
+                activeColor: AppColor.busdetailColor,
                 inactiveColor: Colors.black),
             // BottomNavyBarItem(
             //     textAlign: TextAlign.center,
@@ -59,7 +60,7 @@ class StudentNavigationBar extends StatelessWidget {
                 textAlign: TextAlign.center,
                 icon: Icon(Ionicons.settings_outline),
                 title: Text("More"),
-                activeColor: AppColor.orange,
+                activeColor: AppColor.busdetailColor,
                 inactiveColor: Colors.black),
           ],
         ));

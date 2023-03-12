@@ -1,17 +1,22 @@
 import 'package:fbus_app/src/global/global.dart';
+import 'package:fbus_app/src/models/response_api.dart';
 import 'package:fbus_app/src/pages/driver/home/home_page.dart';
 import 'package:fbus_app/src/pages/landingPage/landing_page.dart';
 import 'package:fbus_app/src/pages/loginByDriver/login.dart';
 import 'package:fbus_app/src/pages/onboard/intro_page.dart';
 import 'package:fbus_app/src/pages/sentOtp/sent_otp_page.dart';
 import 'package:fbus_app/src/pages/splashScreen/splash_screen.dart';
-import 'package:fbus_app/src/pages/student/appBar/student_navigation_bar.dart';
-import 'package:fbus_app/src/pages/student/bookingdart/booking_page.dart';
-import 'package:fbus_app/src/pages/student/listBus/bus_list_page.dart';
+import 'package:fbus_app/src/pages/student/my_ticket/myTicketDetail/my_ticket_detail_page.dart';
+import 'package:fbus_app/src/pages/student/my_ticket/ticketDetail/tickeet_detail_page.dart';
+import 'package:fbus_app/src/pages/student/my_ticket/ticketList/ticket_list_page.dart';
+import 'package:fbus_app/src/pages/student/navigation/student_navigation_bar.dart';
+import 'package:fbus_app/src/pages/student/tripDetail/trip_detail._page.dart';
+import 'package:fbus_app/src/pages/student/listTrip/trip_list_page.dart';
 import 'package:fbus_app/src/pages/student/notifications/notification_page.dart';
 import 'package:fbus_app/src/pages/student/profile/info/profile_page.dart';
 import 'package:fbus_app/src/pages/student/profile/update/update_profile_page.dart';
 import 'package:fbus_app/src/providers/push_notifications_provider.dart';
+import 'package:fbus_app/src/providers/users_provider.dart';
 import 'package:fbus_app/src/theme/theme_controller.dart';
 import 'package:fbus_app/src/utils/firebase_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -33,6 +38,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // pushNotificationsProvider.showNotification(message);
 }
 
+UsersProviders usersProviders = UsersProviders();
 const storage = FlutterSecureStorage();
 
 Future<void> initializeFirebase() async {
@@ -40,7 +46,7 @@ Future<void> initializeFirebase() async {
   await GetStorage.init();
   // Initialize Firebase and wait for it to complete
   await Firebase.initializeApp(
-    name: 'f-bus',
+    name: 'f-bus-a',
     options: FirebaseConfig.currentPlatform,
   );
 
@@ -68,6 +74,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  UsersProviders usersProviders = UsersProviders();
   late Future<int> _onBoardFuture;
   @override
   void initState() {
@@ -104,6 +111,12 @@ class _MyAppState extends State<MyApp> {
 
   // Load data from SharedPreferences to get key: onBoard
   Future<int> _loadData() async {
+    // String? jwtToken = await storage.read(key: 'jwtToken');
+    // if (jwtToken != null) {
+    //   ResponseApi responseApi = await usersProviders.getListTicket(jwtToken);
+    //   final data = responseApi.data;
+    //   GetStorage().write('ticketList', data);
+    // }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getInt('onBoard') ?? 1;
   }
@@ -137,14 +150,20 @@ class _MyAppState extends State<MyApp> {
                   name: '/navigation/home/notifications',
                   page: () => NotificationPage()),
               GetPage(
-                  name: '/navigation/home/list-bus', page: () => BusListPage()),
+                  name: '/navigation/search_trip/list_trip',
+                  page: () => TripListPage()),
               GetPage(
-                  name: '/navigation/home/booking-bus',
-                  page: () => BookingBusPage(
-                        quantitySeats: 5,
-                      )),
+                  name: '/navigation/search_trip/trip_detail',
+                  page: () => TripDetailPage()),
+              GetPage(
+                  name: '/navigation/search_trip/trip_detail/booking',
+                  page: () => TicketDetail()),
               GetPage(name: '/profile/update', page: () => UpdateProfilePage()),
-              GetPage(name: '/profile', page: () => ProfilePage())
+              GetPage(name: '/profile', page: () => ProfilePage()),
+              GetPage(name: '/more/my_ticket', page: () => TicketListPage()),
+              GetPage(
+                  name: '/more/my_ticket/my_ticket_detail',
+                  page: () => MyTicketDetail())
             ],
             theme: Get.find<ThemeController>().isDarkMode
                 ? ThemeData(

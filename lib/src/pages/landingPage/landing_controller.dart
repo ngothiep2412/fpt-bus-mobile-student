@@ -1,4 +1,5 @@
 import 'package:fbus_app/src/global/global.dart';
+import 'package:fbus_app/src/models/llist_ticket_model.dart';
 import 'package:fbus_app/src/models/response_api.dart';
 import 'package:fbus_app/src/providers/users_provider.dart';
 import 'package:get/get.dart';

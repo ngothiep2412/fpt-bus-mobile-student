@@ -19,6 +19,7 @@ class UpdateProfilePage extends StatelessWidget {
         context: context,
         titleString: "Update Profile",
         implementLeading: true,
+        notification: false,
       ),
       body: Stack(
         children: [

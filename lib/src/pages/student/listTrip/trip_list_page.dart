@@ -1,23 +1,30 @@
+import 'package:fbus_app/src/core/const/colors.dart';
+import 'package:fbus_app/src/core/helpers/image_helper.dart';
+import 'package:fbus_app/src/pages/student/listTrip/trip_list_controller.dart';
+import 'package:fbus_app/src/utils/helper.dart';
 import 'package:fbus_app/src/widgets/app_bar_container.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class BusListPage extends StatelessWidget {
-  // const BusListPage({super.key});
+class TripListPage extends StatefulWidget {
+  @override
+  State<TripListPage> createState() => _TripListPageState();
+}
 
-  List users = ["1", "2", "3", "4", "5"];
+class _TripListPageState extends State<TripListPage> {
+  TripListController con = Get.put(TripListController());
 
-  double screenHeight = 0;
   double screenWidth = 0;
 
   @override
   Widget build(BuildContext context) {
-    screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: CustomAppBar(
         context: context,
         implementLeading: true,
-        titleString: "List the bus",
+        titleString: "List The Bus",
+        notification: false,
       ),
       body: SafeArea(
         child: Container(
@@ -30,24 +37,13 @@ class BusListPage extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(
-                  height: 30,
-                ),
-                const Text(
-                  "Choose your trip",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
+                  height: 24,
                 ),
                 ListView.builder(
                   physics: BouncingScrollPhysics(),
                   primary: false,
                   shrinkWrap: true,
-                  itemCount: users.length,
+                  itemCount: con.trips.length,
                   itemBuilder: (context, index) {
                     return itemListView(index);
                   },
@@ -65,7 +61,9 @@ class BusListPage extends StatelessWidget {
 
   Widget itemListView(int index) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        con.handleTripSelection(index, context);
+      },
       child: AnimatedContainer(
         height: 180,
         width: screenWidth,
@@ -86,13 +84,13 @@ class BusListPage extends StatelessWidget {
           children: [
             Container(
               width: screenWidth,
-              height: 180,
+              height: 280,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(16),
                 color: Colors.white,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(30.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,43 +99,40 @@ class BusListPage extends StatelessWidget {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          "assets/icon/ico_location_bus_list.png",
-                          width: 22,
-                          height: 22,
-                          color: Colors.blueAccent,
-                        ),
+                        ImageHelper.loadFromAsset(
+                            Helper.getAssetIconName('ico_location.png')),
                         SizedBox(
                           width: 10,
                         ),
                         Text(
-                          "Vinhomes Grand Park",
+                          con.trips[index].departure,
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                            color: AppColor.text1Color,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
+                    ),
+                    SizedBox(
+                      height: 5,
                     ),
                     //Destination
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          "assets/icon/ico_flag_bus_list.png",
-                          width: 22,
-                          height: 22,
-                          color: Colors.redAccent,
-                        ),
+                        ImageHelper.loadFromAsset(
+                            Helper.getAssetIconName('ico_location.png')),
                         SizedBox(
                           width: 10,
                         ),
                         Text(
-                          "University of Transportation",
+                          con.trips[index].destination,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                            color: AppColor.text1Color,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
@@ -153,24 +148,26 @@ class BusListPage extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Image.asset(
-                              "assets/icon/ico_schedule_bus_list.png",
-                              width: 20,
-                              height: 20,
-                              color: Colors.black,
-                            ),
+                            ImageHelper.loadFromAsset(
+                                Helper.getAssetIconName('ico_calendal.png')),
                             SizedBox(
                               width: 10,
                             ),
                             Container(
                               decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
-                                      width: 1, color: Colors.black)),
+                                      width: 2,
+                                      color: AppColor.busdetailColor)),
                               child: Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: Text(
-                                  "12:12:12",
-                                  style: TextStyle(fontSize: 16),
+                                  con.trips[index].departureTime,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColor.text1Color,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),
@@ -184,17 +181,20 @@ class BusListPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Image.asset(
-                                "assets/icon/ico_bus_list.png",
-                                width: 40,
-                                height: 40,
-                                color: Colors.orange,
+                                "assets/icon/ico_bus.png",
+                                width: 36,
+                                height: 36,
                               ),
                               SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                "51A-099.99",
-                                style: TextStyle(fontSize: 16),
+                                con.trips[index].licensePlate,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppColor.text1Color,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ],
                           ),
@@ -214,7 +214,7 @@ class BusListPage extends StatelessWidget {
                 height: 43,
                 decoration: BoxDecoration(
                     border: Border.all(
-                      color: Colors.green,
+                      color: AppColor.busdetailColor,
                       width: 2,
                     ),
                     color: Colors.white,
@@ -223,16 +223,16 @@ class BusListPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "45",
+                        con.trips[index].ticketQuantity.toString(),
                         style: TextStyle(
-                            color: Colors.green,
+                            color: AppColor.busdetailColor,
                             fontWeight: FontWeight.w700,
                             fontSize: 15),
                       ),
                       Text(
                         "seats",
                         style: TextStyle(
-                            color: Colors.black45,
+                            color: AppColor.text1Color,
                             fontWeight: FontWeight.w400,
                             fontSize: 11),
                       )

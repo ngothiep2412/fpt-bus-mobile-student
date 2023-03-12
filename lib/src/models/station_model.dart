@@ -4,18 +4,18 @@ class Station {
     required this.stationName,
     required this.longitude,
     required this.latitude,
-    required this.status,
-    required this.createdAt,
-    required this.updadtedAt,
+    this.status,
+    this.createdAt,
+    this.updadtedAt,
   });
 
   String id;
   String stationName;
   String longitude;
   String latitude;
-  int status;
-  DateTime createdAt;
-  DateTime updadtedAt;
+  int? status;
+  DateTime? createdAt;
+  DateTime? updadtedAt;
 
   factory Station.fromJson(Map<String, dynamic> json) => Station(
         id: json["id"],
@@ -33,7 +33,7 @@ class Station {
         "longitude": longitude,
         "latitude": latitude,
         "status": status,
-        "createdAt": createdAt.toIso8601String(),
-        "updadtedAt": updadtedAt.toIso8601String(),
+        "createdAt": createdAt!.toIso8601String(),
+        "updadtedAt": updadtedAt!.toIso8601String(),
       };
 }

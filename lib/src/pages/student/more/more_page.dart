@@ -18,6 +18,7 @@ class MorePage extends StatelessWidget {
         context: context,
         implementLeading: false,
         titleString: "More",
+        notification: false,
       ),
       body: SafeArea(
           child: Container(
@@ -53,7 +54,7 @@ class MorePage extends StatelessWidget {
                     colorOff: Color.fromARGB(255, 238, 123, 65),
                     iconOn: Ionicons.moon,
                     iconOff: Ionicons.sunny,
-                    textSize: 12.0,
+                    textSize: 10.0,
                     textOnColor: Colors.white,
                     onChanged: (bool state) {
                       Get.find<ThemeController>().toggleTheme();
@@ -75,6 +76,18 @@ class MorePage extends StatelessWidget {
               name: "Profile Details",
               handler: () {
                 Get.toNamed('/profile');
+              },
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            MoreCard(
+              image: Image.asset(
+                Helper.getAssetIconName('ico_ticket.png'),
+              ),
+              name: "My Ticket",
+              handler: () {
+                con.goToMyTicketList();
               },
             ),
             SizedBox(

@@ -91,9 +91,13 @@ class LandingPage extends StatelessWidget {
         height: Helper.getScreenHeight(context) * 0.30,
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(children: [
+          _textWelcome(),
+          const SizedBox(
+            height: 20,
+          ),
           _textSlogan(),
           const SizedBox(
-            height: 100,
+            height: 80,
           ),
           _btnLoginByStudent(),
           const SizedBox(
@@ -104,12 +108,30 @@ class LandingPage extends StatelessWidget {
     );
   }
 
+  Widget _textWelcome() {
+    return Container(
+      child: Text(
+        "Welcome to F-BUS",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 16,
+          color: AppColor.busdetailColor,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
   Widget _textSlogan() {
     return Container(
       child: Text(
         "Travel with ease with online bus booking.",
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(
+          fontSize: 16,
+          color: AppColor.text1Color,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -140,6 +162,8 @@ class LandingPage extends StatelessWidget {
               "Login by student",
               style: TextStyle(
                 color: AppColor.textColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
               ),
             )
           ],

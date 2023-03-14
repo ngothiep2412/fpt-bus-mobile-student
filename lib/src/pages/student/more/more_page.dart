@@ -71,7 +71,7 @@ class MorePage extends StatelessWidget {
             ),
             MoreCard(
               image: Image.asset(
-                Helper.getAssetIconName('ico_user.png'),
+                Helper.getAssetIconName('ico_driverName.png'),
               ),
               name: "Profile Details",
               handler: () {
@@ -95,7 +95,7 @@ class MorePage extends StatelessWidget {
             ),
             MoreCard(
               image: Image.asset(
-                Helper.getAssetIconName('ico_income.png'),
+                Helper.getAssetIconName('ico_payment.png'),
               ),
               name: "Payment Details",
               handler: () {

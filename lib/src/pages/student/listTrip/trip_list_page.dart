@@ -118,24 +118,26 @@ class _TripListPageState extends State<TripListPage> {
                       height: 5,
                     ),
                     //Destination
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ImageHelper.loadFromAsset(
-                            Helper.getAssetIconName('ico_location.png')),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          con.trips[index].destination,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: AppColor.text1Color,
-                            fontWeight: FontWeight.w600,
+                    Container(
+                      child: Row(
+                        children: [
+                          ImageHelper.loadFromAsset(
+                              Helper.getAssetIconName('ico_location.png')),
+                          SizedBox(
+                            width: 10,
                           ),
-                        ),
-                      ],
+                          Expanded(
+                            child: Text(
+                              con.trips[index].destination,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.text1Color,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                     SizedBox(),
@@ -149,7 +151,7 @@ class _TripListPageState extends State<TripListPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             ImageHelper.loadFromAsset(
-                                Helper.getAssetIconName('ico_calendal.png')),
+                                Helper.getAssetIconName('ico_time.png')),
                             SizedBox(
                               width: 10,
                             ),
@@ -181,7 +183,7 @@ class _TripListPageState extends State<TripListPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Image.asset(
-                                "assets/icon/ico_bus.png",
+                                "assets/icon/ico_license.png",
                                 width: 36,
                                 height: 36,
                               ),

@@ -1,5 +1,7 @@
+import 'package:fbus_app/src/widgets/custom_peromotion_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../core/const/promotion.dart';
 import '../theme/colors.dart';
@@ -17,26 +19,7 @@ class _CustomPromotionCardState extends State<CustomPromotionCard>
   late AnimationController _controller;
   late Animation<double> _animation;
   late DateTime destinationTime;
-
-  @override
-  void initState() {
-    super.initState();
-    destinationTime = DateTime.now().add(Duration(minutes: 2));
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 60 * 10), // 10 minutes
-    )..reverse(from: 1.0); // start the animation from the end
-    _animation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(_controller);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  CustomPromotionCardController con = Get.put(CustomPromotionCardController());
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +66,7 @@ class _CustomPromotionCardState extends State<CustomPromotionCard>
                 Container(
                   width: size.width * .425,
                   child: Text(
-                    'DATE: 2023-03-11',
+                    'Date: 2023-03-11',
                     style: TextStyle(
                       fontSize: 15.0,
                       color: textWhite,
@@ -92,7 +75,10 @@ class _CustomPromotionCardState extends State<CustomPromotionCard>
                   ),
                 ),
                 SizedBox(height: 7.0),
-                setTimeLeft(size),
+                Obx(
+                  () => Text('Time left: ${con.time.value}',
+                      style: TextStyle(fontSize: 16, color: Colors.white)),
+                ),
                 Spacer(),
                 SizedBox(height: 7.0),
                 Container(
@@ -135,46 +121,6 @@ class _CustomPromotionCardState extends State<CustomPromotionCard>
           ),
         ],
       ),
-    );
-  }
-
-  Widget setTimeLeft(Size size) {
-    Duration difference = destinationTime.difference(DateTime.now());
-    if (difference.inSeconds <= 0) {
-      _controller.stop();
-      return Container(
-        width: size.width * .425,
-        child: Text(
-          "Time's up!",
-          style: TextStyle(
-            fontSize: 15.0,
-            color: textWhite,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      );
-    }
-
-    int minutes = difference.inMinutes;
-    int seconds = difference.inSeconds % 60;
-    String timeLeft =
-        "Time left: ${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
-
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return Container(
-          width: size.width * .425,
-          child: Text(
-            timeLeft,
-            style: TextStyle(
-              fontSize: 15.0,
-              color: textWhite,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        );
-      },
     );
   }
 }

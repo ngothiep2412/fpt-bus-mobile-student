@@ -31,8 +31,9 @@ class SearchTripController extends GetxController {
       );
       try {
         if (jwtToken != null) {
+          print('date $date');
           List<TripModel> listTrip = await usersProviders.getDataTrip(
-              jwtToken, date, routeTextEditting.text);
+              jwtToken, '2023-03-14', routeTextEditting.text);
           progressDialog.close();
           if (listTrip.isNotEmpty) {
             GetStorage().write('trip', listTrip);

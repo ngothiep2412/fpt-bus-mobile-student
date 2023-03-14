@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:fbus_app/src/core/const/colors.dart';
 import 'package:fbus_app/src/models/response_api.dart';
 import 'package:fbus_app/src/models/users.dart';
+import 'package:fbus_app/src/pages/student/home/home_controller.dart';
 import 'package:fbus_app/src/pages/student/profile/info/profile_controller.dart';
+import 'package:fbus_app/src/pages/student/searchTrip/search_trip_controller.dart';
 import 'package:fbus_app/src/providers/users_provider.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -13,19 +15,20 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class UpdateProfileController extends GetxController {
-  UserModel userSession = UserModel.fromJson(GetStorage().read('user') ?? {});
   FlutterSecureStorage storage = FlutterSecureStorage();
 
-  var user = UserModel.fromJson(GetStorage().read('user') ?? {}).obs;
+  UserModel user = UserModel.fromJson(GetStorage().read('user') ?? {});
+  var informationUser = UserModel.fromJson(GetStorage().read('user') ?? {}).obs;
+
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
   ProfileController profileController = Get.find();
-
+  HomeController homeController = Get.find();
+  SearchTripController searchTripController = Get.find();
   UpdateProfileController() {
-    print('USER SESION: ${GetStorage().read('user')}');
-    nameController.text = userSession.fullname ?? '';
-    phoneController.text = userSession.phoneNumber ?? '';
+    nameController.text = informationUser.value.fullname ?? '';
+    phoneController.text = informationUser.value.phoneNumber ?? '';
   }
 
   final RegExp phoneExp = RegExp(r'^[0-9]+$');
@@ -33,15 +36,14 @@ class UpdateProfileController extends GetxController {
   ImagePicker picker = ImagePicker();
   File? imageFile;
   UsersProviders usersProviders = UsersProviders();
-
   void updateInfo(BuildContext context) async {
     String name = nameController.text;
     String phone = phoneController.text;
-    print(
-        'updateProfileController.user.value: ${profileController.user.value.fullname}');
+    if (phone.isEmpty) {
+      phone = '';
+    }
     if (isValidForm(name, phone)) {
       ProgressDialog progressDialog = ProgressDialog(context: context);
-
       progressDialog.show(
         max: 200,
         msg: 'Updating data...',
@@ -49,52 +51,66 @@ class UpdateProfileController extends GetxController {
         progressBgColor: AppColor.orange,
         // msgColor: Colors.black,
       );
-
-      UserModel myUser = UserModel(
-        email: userSession.email,
-        fullname: userSession.fullname,
-        id: userSession.id,
-        phoneNumber: userSession.phoneNumber,
-        profileImg: userSession.profileImg,
-        roleName: userSession.roleName,
-        status: userSession.status,
-        studentId: userSession.studentId,
-      );
-      print('myUser ${myUser.roleName}');
-      print('name $name');
-      print('phone $phone');
-      final box = GetStorage();
-      String jwtToken = box.read('jwtToken');
-      if (imageFile == null) {
-        ResponseApi responseApi = await usersProviders
-            .updateProfileWithoutPicture(userSession, jwtToken);
-        final dataUser = responseApi.data;
-        UserModel userUpdate = UserModel(
-          email: dataUser['email'],
-          fullname: dataUser['fullname'],
-          id: dataUser['id'],
-          phoneNumber: dataUser['phone_number'],
-          profileImg: dataUser['profile_img'],
-          roleName: dataUser['RoleType']['role_name'],
-          status: dataUser['status'],
-          studentId: dataUser['student_id'],
-        );
-        GetStorage().write('user', userUpdate);
-        progressDialog.close();
-        Get.snackbar("Succesfully", "Updated your information Succesfully!");
-        Get.toNamed('/profile');
-      } else {
-        // String? jwtToken = await storage.read(key: 'jwtToken');
-        List<int> imageBytes = await imageFile!.readAsBytes();
-        String base64Image = base64Encode(imageBytes);
-        print('base64Image $base64Image');
-        // String? jwtToken = await storage.read(key: 'jwtToken');
-        ResponseApi responseApi = await usersProviders.updateProfilePicture(
-            userSession, base64Image, jwtToken);
-        // final data = responseApi['data'];
-        if (responseApi.data != null) {
-          Get.snackbar("Successfully", "Updated image fully");
+      try {
+        String? jwtToken = await storage.read(key: 'jwtToken');
+        if (jwtToken != null) {
+          if (imageFile == null) {
+            ResponseApi responseApi = await usersProviders
+                .updateProfileWithoutPicture(name, phone, jwtToken, user);
+            final dataUser = responseApi.data;
+            if (dataUser != null) {
+              profileController.user.value =
+                  UserModel.fromJson(responseApi.data);
+              searchTripController.user.value =
+                  UserModel.fromJson(responseApi.data);
+              homeController.user.value = UserModel.fromJson(responseApi.data);
+              if (GetStorage().hasData('user')) {
+                GetStorage().remove('user');
+              }
+              GetStorage().write('user', dataUser);
+              progressDialog.close();
+              Get.snackbar(
+                  "Succesfully", "Updated your information Succesfully!");
+            }
+          } else {
+            // String? jwtToken = await storage.read(key: 'jwtToken');
+            List<int> imageBytes = await imageFile!.readAsBytes();
+            String base64Image = base64Encode(imageBytes);
+            // String? jwtToken = await storage.read(key: 'jwtToken');
+            ResponseApi responseApifirst =
+                await usersProviders.uploadPicture(user, base64Image, jwtToken);
+            if (responseApifirst.data != null) {
+              ResponseApi responseApi =
+                  await usersProviders.updateProfilePicture(
+                      responseApifirst.data['imageUrl'],
+                      name,
+                      phone,
+                      jwtToken,
+                      user);
+              final dataUser = responseApi.data;
+              print('AAAA: $dataUser');
+              if (responseApi.data != null) {
+                profileController.user.value =
+                    UserModel.fromJson(responseApi.data);
+                searchTripController.user.value =
+                    UserModel.fromJson(responseApi.data);
+                homeController.user.value =
+                    UserModel.fromJson(responseApi.data);
+                if (GetStorage().hasData('user')) {
+                  GetStorage().remove('user');
+                }
+                print('DATA UPDATED: ${dataUser}');
+                GetStorage().write('user', dataUser);
+                progressDialog.close();
+                Get.snackbar(
+                    "Succesfully", "Updated your information Succesfully!");
+              }
+            }
+          }
         }
+      } catch (e) {
+        Get.snackbar("Error", "Updated your information fail!");
+        progressDialog.close();
       }
     }
   }
@@ -174,11 +190,10 @@ class UpdateProfileController extends GetxController {
     String phone,
   ) {
     if (phone.isEmpty) {
-      Get.snackbar('Invalid from', 'You must enter your phone');
-      return false;
+      return true;
     } else {
       if (phoneExp.hasMatch(phone) == false) {
-        Get.snackbar('Invalid from', 'You must enter number');
+        Get.snackbar('Invalid from', 'You must enter with valid phone');
         return false;
       }
     }

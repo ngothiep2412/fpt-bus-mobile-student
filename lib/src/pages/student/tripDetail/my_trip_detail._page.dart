@@ -14,12 +14,12 @@ import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:http/http.dart' as http;
 
-class TripDetailPage extends StatefulWidget {
+class MyTripDetailPage extends StatefulWidget {
   @override
-  State<TripDetailPage> createState() => _TripDetailPageState();
+  State<MyTripDetailPage> createState() => _MyTripDetailPageState();
 }
 
-class _TripDetailPageState extends State<TripDetailPage> {
+class _MyTripDetailPageState extends State<MyTripDetailPage> {
   TripDetailController con = Get.put(TripDetailController());
 
   List<Station> stationList = [];
@@ -209,7 +209,7 @@ class _TripDetailPageState extends State<TripDetailPage> {
           ),
           SafeArea(
             child: Container(
-              height: 490,
+              height: 200,
               padding: EdgeInsets.all(4),
               child: SingleChildScrollView(
                 child: Column(
@@ -396,89 +396,6 @@ class _TripDetailPageState extends State<TripDetailPage> {
                             child: Row(
                               children: [
                                 Text(
-                                  'Information Driver:',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: AppColor.text1Color,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20, top: 10),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Driver Name:',
-                                  style: TextStyle(
-                                    color: AppColor.busdetailColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                WidgetSpan(
-                                    child: SizedBox(
-                                  width: 10,
-                                )),
-                                TextSpan(
-                                  text: con.tripDetail.driverName,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.text1Color,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20, top: 10),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'License Plate :',
-                                  style: TextStyle(
-                                    color: AppColor.busdetailColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                WidgetSpan(
-                                    child: SizedBox(
-                                  width: 10,
-                                )),
-                                TextSpan(
-                                  text: con.tripDetail.licensePlate,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.text1Color,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 20, top: 10),
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Text(
                                   'Information Route:',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -623,6 +540,8 @@ class _TripDetailPageState extends State<TripDetailPage> {
                         ? Expanded(
                             child: ListView.builder(
                               itemCount: stationList.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.only(right: 25),
                               itemBuilder: (context, index) {
                                 return Column(
@@ -707,7 +626,7 @@ class _TripDetailPageState extends State<TripDetailPage> {
     required LatLng origin,
     required LatLng destination,
   }) async {
-    final String baseUrl =
+    const String baseUrl =
         'https://maps.googleapis.com/maps/api/directions/json';
     final response = await http.get(
       Uri.parse('$baseUrl?'

@@ -39,7 +39,7 @@ class UsersProviders extends GetConnect {
     }
   }
 
-  Future<ResponseApi> updateProfilePicture(
+  Future<ResponseApi> uploadPicture(
       UserModel user, String base64Image, String jwtToken) async {
     Uri uri = Uri.http(Environment.API_URL_OLD, '/api/v1/upload-file');
 
@@ -59,7 +59,6 @@ class UsersProviders extends GetConnect {
       headers: headers,
       body: jsonEncode(body),
     );
-
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final responseApi = ResponseApi.fromJson(data);
@@ -70,23 +69,18 @@ class UsersProviders extends GetConnect {
   }
 
   Future<ResponseApi> updateProfileWithoutPicture(
-      UserModel user, String jwtToken) async {
-    Uri uri = Uri.http(
-        Environment.API_URL_OLD, '/api/v1/users/change-status/${user.id}');
-
+      String name, String phone, String jwtToken, UserModel user) async {
+    Uri uri =
+        Uri.http(Environment.API_URL_OLD, '/api/v1/users/update/${user.id}');
+    print('DATA: $uri');
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $jwtToken',
     };
 
     final Map<String, dynamic> body = {
-      'fullname': user.fullname,
-      'email': user.email,
-      'phone': user.phoneNumber,
-      'student_id': user.id,
-      'profile_img': user.profileImg,
-      'role_id': 0,
-      'status': true
+      'fullname': name,
+      'phone_number': phone,
     };
 
     final http.Response response = await http.put(
@@ -94,7 +88,46 @@ class UsersProviders extends GetConnect {
       headers: headers,
       body: jsonEncode(body),
     );
+    if (response.statusCode == 400) {
+      Get.snackbar("Invalid", "You need enter with valid data");
+    }
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } else {
+      throw Exception('Failed to update profile picture');
+    }
+  }
 
+  Future<ResponseApi> updateProfilePicture(String imageUrl, String name,
+      String phone, String jwtToken, UserModel user) async {
+    print('PHONE Upload profile: $phone');
+    print('PHONE Upload profile: $name');
+    print('PHONE Upload profile: $imageUrl');
+
+    Uri uri =
+        Uri.http(Environment.API_URL_OLD, '/api/v1/users/update/${user.id}');
+    print('DATA: $uri');
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $jwtToken',
+    };
+
+    final Map<String, dynamic> body = {
+      'fullname': name,
+      'phone_number': phone,
+      'profile_img': imageUrl,
+    };
+
+    final http.Response response = await http.put(
+      uri,
+      headers: headers,
+      body: jsonEncode(body),
+    );
+    if (response.statusCode == 400) {
+      Get.snackbar("Invalid", "You need enter with valid data");
+    }
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final responseApi = ResponseApi.fromJson(data);
@@ -136,6 +169,7 @@ class UsersProviders extends GetConnect {
 
   Future<List<TripModel>> getDataTrip(
       String jwtToken, String date, String routeId) async {
+    print('DATE :: $date');
     Uri uri = Uri.http(Environment.API_URL_OLD, '/api/v1/trip',
         {'date': date, 'route_id': routeId});
 

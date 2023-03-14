@@ -13,48 +13,49 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        context: context,
-        titleString: "My Profile",
-        notification: false,
-      ),
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Container(
-                width: Helper.getScreenWidth(context),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: Column(
-                      children: [
-                        _imageProfile(context),
-                        const SizedBox(
-                          height: 10,
+        appBar: CustomAppBar(
+          context: context,
+          titleString: "My Profile",
+          notification: false,
+        ),
+        body: Obx(
+          () => Stack(
+            children: [
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Container(
+                    width: Helper.getScreenWidth(context),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                        child: Column(
+                          children: [
+                            _imageProfile(context),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            _boxForm(context),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            ItemButtonWidget(
+                              data: 'Update profile',
+                              color: Colors.white,
+                              onTap: () {
+                                con.goToProfileUpdate();
+                              },
+                            )
+                          ],
                         ),
-                        _boxForm(context),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        ItemButtonWidget(
-                          data: 'Update profile',
-                          color: Colors.white,
-                          onTap: () {
-                            con.goToProfileUpdate();
-                          },
-                        )
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 
   Widget _boxForm(BuildContext context) {

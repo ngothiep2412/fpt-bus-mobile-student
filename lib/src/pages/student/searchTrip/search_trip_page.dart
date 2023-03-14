@@ -144,7 +144,7 @@ class _SearchTripPageState extends State<SearchTripPage> {
                     ),
                     SizedBox(height: 10),
                     ItemButtonWidget(
-                      data: 'Search the bus',
+                      data: 'Search the trip',
                       color: Colors.white,
                       onTap: () {
                         con.searchTheBus(context);

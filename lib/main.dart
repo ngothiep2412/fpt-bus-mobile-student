@@ -10,11 +10,12 @@ import 'package:fbus_app/src/pages/student/my_ticket/myTicketDetail/my_ticket_de
 import 'package:fbus_app/src/pages/student/my_ticket/ticketDetail/tickeet_detail_page.dart';
 import 'package:fbus_app/src/pages/student/my_ticket/ticketList/ticket_list_page.dart';
 import 'package:fbus_app/src/pages/student/navigation/student_navigation_bar.dart';
-import 'package:fbus_app/src/pages/student/tripDetail/trip_detail._page.dart';
+import 'package:fbus_app/src/pages/student/tripDetail/my_trip_detail._page.dart';
 import 'package:fbus_app/src/pages/student/listTrip/trip_list_page.dart';
 import 'package:fbus_app/src/pages/student/notifications/notification_page.dart';
 import 'package:fbus_app/src/pages/student/profile/info/profile_page.dart';
 import 'package:fbus_app/src/pages/student/profile/update/update_profile_page.dart';
+import 'package:fbus_app/src/pages/student/tripDetail/trip_details_page.dart';
 import 'package:fbus_app/src/providers/push_notifications_provider.dart';
 import 'package:fbus_app/src/providers/users_provider.dart';
 import 'package:fbus_app/src/theme/theme_controller.dart';
